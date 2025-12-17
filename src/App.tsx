@@ -1,4 +1,8 @@
 import React from 'react';
+import { supabase } from '../supabase/client';
+
+const tasks = await supabase.from("tasks").select('*');
+console.log(tasks);
 
 function App(): React.JSX.Element {
   return (
