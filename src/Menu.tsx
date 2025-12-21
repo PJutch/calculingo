@@ -41,7 +41,7 @@ function Menu(): React.JSX.Element {
         }
       </div>
       <div className='browse-wrapper'>
-        <button className='browse' onClick={() => alert("TODO: implement browse custom collections page")}>Искать...</button>
+        <button className='browse' onClick={() => navigate("/browse")}>Искать...</button>
       </div>
     </div>
   );
