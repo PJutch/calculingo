@@ -28,11 +28,15 @@
 }
 
 .task-formula {
+    width: 100%;
+    box-sizing: border-box;
     border: 2px solid black;
     border-radius: 20px;
 }
 
 .option-formula {
+    width: calc(100% - 50px);
+    box-sizing: border-box;
     border: 2px solid;
     border-radius: 20px;
     padding: 3px;

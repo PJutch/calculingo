@@ -1,5 +1,5 @@
 import { MathJax } from "better-react-mathjax";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import './Edit.css';
 
@@ -51,6 +51,72 @@ const collections: { [key: string]: Collection } = {
     }
 };
 
+interface EditableH1Options {
+    children: string,
+    className: string,
+    onEdit?: () => void
+}
+
+function EditableH1({ children, className, onEdit }: EditableH1Options): React.JSX.Element {
+    const [isEditing, setEditing] = useState<boolean>(false);
+    const [text, setText] = useState<string>(children);
+
+    if (onEdit !== undefined) {
+        useEffect(() => {
+            if (!isEditing) {
+                onEdit();
+            }
+        }, [isEditing]);
+    }
+
+    if (isEditing) {
+        return (<input className={className} value={text}
+            onChange={e => setText(e.target.value)} onBlur={() => setEditing(false)}
+            onKeyDown={e => {
+                if (e.key === "Enter" || e.key == "Escape") {
+                    setEditing(false);
+                }
+            }} autoFocus />)
+    } else {
+        return (<h1 className={className} onClick={() => setEditing(true)}>{text}</h1>)
+    }
+}
+
+interface EditableMathJaxOptions {
+    children: string | string[],
+    className: string,
+    onEdit?: () => void
+}
+
+function EditableMathJax({ children, className, onEdit }: EditableMathJaxOptions): React.JSX.Element {
+    if (Array.isArray(children)) {
+        children = children.join('');
+    }
+
+    const [isEditing, setEditing] = useState<boolean>(false);
+    const [text, setText] = useState<string>(children);
+
+    if (onEdit !== undefined) {
+        useEffect(() => {
+            if (!isEditing) {
+                onEdit();
+            }
+        }, [isEditing]);
+    }
+
+    if (isEditing) {
+        return (<input className={className} value={text}
+            onChange={e => setText(e.target.value)} onBlur={() => setEditing(false)}
+            onKeyDown={e => {
+                if (e.key === "Enter" || e.key == "Escape") {
+                    setEditing(false);
+                }
+            }} autoFocus />)
+    } else {
+        return (<MathJax className={className} onClick={() => setEditing(true)}>\(\displaystyle {text}\)</MathJax>)
+    }
+}
+
 function Edit(): React.JSX.Element {
     const { collection } = useParams();
     if (collection === undefined) {
@@ -58,15 +124,14 @@ function Edit(): React.JSX.Element {
     }
 
     return (<div className="edit-container">
-        <h1 className="title">{collections[collection].name}</h1>
+        <EditableH1 className="title">{collections[collection].name}</EditableH1>
         <div className="tasks">
             {Object.entries(collections[collection].tasks).map(([taskId, task]) => <div className="task">
-                <MathJax className="formula task-formula">\(\displaystyle {task.formula}\)</MathJax>
+                <EditableMathJax className="formula task-formula">{task.formula}</EditableMathJax>
                 {task.options.map(option =>
-                    <MathJax className={
+                    <EditableMathJax className={
                         option.is_right ? "formula option-formula option-right"
-                            : "formula option-formula option-wrong"}>
-                        \(\displaystyle {option.formula}\)</MathJax>)}
+                            : "formula option-formula option-wrong"}>{option.formula}</EditableMathJax>)}
             </div>)}
         </div>
     </div>)
