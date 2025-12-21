@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import './Browse.css';
 import { useNavigate } from "react-router-dom";
 
@@ -33,12 +33,15 @@ const collections: Collection[] = [
 function Browse(): React.JSX.Element {
     const navigate = useNavigate();
 
+    const [query, setQuery] = useState<string>();
+
     return (<div className="browse-container">
-        <input placeholder="Введите запрос..." className="search-bar" />
+        <input placeholder="Введите запрос..." className="search-bar" onChange={e => setQuery(e.target.value)} />
         <div className="collections">
-            {collections.map((collection) =>
-                <button className="collection" onClick={() => navigate(`/solve/${collection.name}`)}>
-                    {collection.name}</button>)}
+            {collections.filter(collection => query == undefined || query === "" || collection.name.includes(query))
+                .map(collection =>
+                    <button className="collection" onClick={() => navigate(`/solve/${collection.id}`)}>
+                        {collection.name}</button>)}
         </div>
     </div>);
 }
