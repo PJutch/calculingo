@@ -1,0 +1,51 @@
+.edit-container {
+    padding: 10px 20px 0;
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+.title {
+    text-align: center;
+    font-size: 70px;
+}
+
+.tasks {
+    flex-grow: 1;
+    overflow-y: scroll;
+    border: 2px solid lightgrey;
+    padding: 10px 10px 0;
+}
+
+.task {
+    margin-bottom: 15px;
+}
+
+.formula {
+    font-size: 50px;
+    text-align: center;
+}
+
+.task-formula {
+    border: 2px solid black;
+    border-radius: 20px;
+}
+
+.option-formula {
+    border: 2px solid;
+    border-radius: 20px;
+    padding: 3px;
+    margin-top: 5px;
+    margin-left: 50px;
+}
+
+.option-right {
+    background-color: lightgreen;
+    border-color: green;
+}
+
+.option-wrong {
+    background-color: lightcoral;
+    border-color: red;
+}

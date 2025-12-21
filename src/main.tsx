@@ -1,10 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { MathJaxContext } from 'better-react-mathjax';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Menu from './Menu';
 import Task, {RandomTaskRedirect} from './Task';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Browse from './Browse';
+import Edit from './Edit';
 
 const root = document.getElementById('root');
 if (!root) throw new Error('Root element not found');
@@ -18,6 +19,7 @@ ReactDOM.createRoot(root).render(
           <Route path="/solve/:collection/:task" element={<Task />} />
           <Route path="/solve/:collection" element={<RandomTaskRedirect />} />
           <Route path="/browse" element={<Browse />} />
+          <Route path="/edit/:collection" element={<Edit />} />
         </Routes>
       </MathJaxContext>
     </BrowserRouter>
