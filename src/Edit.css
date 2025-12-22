@@ -35,13 +35,13 @@
 }
 
 .option-formula {
-    width: calc(100% - 50px);
+    flex-grow: 1;
     box-sizing: border-box;
     border: 2px solid;
     border-radius: 20px;
     padding: 3px;
     margin-top: 5px;
-    margin-left: 50px;
+    margin-left: 10px;
 }
 
 .option-right {
@@ -52,4 +52,41 @@
 .option-wrong {
     background-color: lightcoral;
     border-color: red;
+}
+
+.row-container {
+    display: flex;
+    margin-left: 10px;
+}
+
+.add-option-button {
+    width: calc(100% - 20px);
+    margin-top: 5px;
+    margin-left: 20px;
+    font-size: 50px;
+    border-radius: 10px;
+    border: none;
+    background-color: brown;
+    color: white;
+}
+
+.add-task-button {
+    width: 100%;
+    margin-top: 5px;
+    font-size: 50px;
+    border-radius: 10px;
+    border: none;
+    background-color: brown;
+    color: white;
+}
+
+.delete-icon {
+    margin-left: -55px;
+    margin-right: 5px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.delete-icon:hover {
+    opacity: 1;
 }

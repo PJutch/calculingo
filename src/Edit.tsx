@@ -4,7 +4,8 @@ import { useParams } from "react-router-dom";
 import './Edit.css';
 import {
     useGetCollectionQuery, useGetTasksQuery, useSetOptionFormulaMutation,
-    useGetCollectionOptionsQuery, useSetCollectionNameMutation, useSetTaskFormulaMutation
+    useGetCollectionOptionsQuery, useSetCollectionNameMutation, useSetTaskFormulaMutation,
+    useSetOptionIsRightMutation, useCreateOptionMutation, useCreateTaskMutation
 } from "./tasks";
 
 interface EditableH1Options {
@@ -85,7 +86,10 @@ function Edit(): React.JSX.Element {
 
     const [setCollectionName, updateCollectionStatus] = useSetCollectionNameMutation();
     const [setTaskFormula, updateTaskStatus] = useSetTaskFormulaMutation();
+    const [createTask, createTaskStatus] = useCreateTaskMutation();
     const [setOptionFormula, updateOptionStatus] = useSetOptionFormulaMutation();
+    const [setOptionIsRight, setOptionIsRightStatus] = useSetOptionIsRightMutation();
+    const [createOption, createOptionStatus] = useCreateOptionMutation();
 
     if (isCollectionLoading || areTasksLoading || areOptionsLoading) {
         return (<p>Loading...</p>)
@@ -102,16 +106,33 @@ function Edit(): React.JSX.Element {
             {collection.name}</EditableH1>
         <div className="tasks">
             {tasks.map((task) => <div className="task" key={task.id}>
-                <EditableMathJax className="formula task-formula"
-                    onEdit={newFormula => setTaskFormula({ id: task.id, formula: newFormula })}>
-                    {task.formula}</EditableMathJax>
+                <div className="row-container">
+                    <EditableMathJax className="formula task-formula"
+                        onEdit={newFormula => setTaskFormula({ id: task.id, formula: newFormula })}>
+                        {task.formula}</EditableMathJax>
+                    <svg viewBox="0 0 24 24" width="48" className="delete-icon"
+                        onClick={() => { }}>
+                        <use href="/icons/trash.svg"></use></svg>
+                </div>
                 {optionsByTask[task.id]?.map(option =>
-                    <EditableMathJax key={option.id} className={
-                        option.is_right ? "formula option-formula option-right"
-                            : "formula option-formula option-wrong"}
-                        onEdit={newFormula => setOptionFormula({ id: option.id, formula: newFormula })}>
-                        {option.formula}</EditableMathJax>)}
+                    <div className="row-container">
+                        <svg viewBox="0 0 24 24" width="48"
+                            onClick={() => {
+                                setOptionIsRight({ id: option.id, is_right: !option.is_right });
+                            }}>
+                            <use href={option.is_right ? "/icons/check.svg" : "/icons/x.svg"}></use></svg>
+                        <EditableMathJax key={option.id} className={
+                            option.is_right ? "formula option-formula option-right"
+                                : "formula option-formula option-wrong"}
+                            onEdit={newFormula => setOptionFormula({ id: option.id, formula: newFormula })}>
+                            {option.formula}</EditableMathJax>
+                        <svg viewBox="0 0 24 24" width="48" className="delete-icon"
+                            onClick={() => { }}>
+                            <use href="/icons/trash.svg"></use></svg>
+                    </div>)}
+                <button className="add-option-button" onClick={() => createOption()}>+</button>
             </div>)}
+            <button className="add-task-button" onClick={() => createTask()}>+</button>
         </div>
     </div>)
 }

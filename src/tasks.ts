@@ -44,12 +44,12 @@ export const supabaseApi = createApi({
                 if (error) throw error;
                 return { data };
             },
-            providesTags: (result, error, id) => [{ type: "Collection", id }]
+            providesTags: ["Collection"]
         }),
-        createCollection: builder.mutation<Collection, Collection>({
-            queryFn: async (collection) => {
+        createCollection: builder.mutation<Collection, void>({
+            queryFn: async () => {
                 const { data, error } = await supabase
-                    .from("collections").insert(collection).select("*").single();
+                    .from("collections").insert({}).select("*").single();
                 if (error) throw error;
                 return { data };
             },
@@ -62,7 +62,7 @@ export const supabaseApi = createApi({
                 if (error) throw error;
                 return { data };
             },
-            invalidatesTags: (result, error, { id, name }) => [{ type: "Collection", id }]
+            invalidatesTags: ["Collection"]
         }),
         getTasks: builder.query<Task[], string>({
             queryFn: async (collection) => {
@@ -79,11 +79,11 @@ export const supabaseApi = createApi({
                 if (error) throw error;
                 return { data };
             },
-            providesTags: (result, error, id) => [{ type: "Task", id }]
+            providesTags: ["Task"]
         }),
-        createTask: builder.mutation<Task, Task>({
-            queryFn: async (task) => {
-                const { data, error } = await supabase.from("tasks").insert(task).select("*").single();
+        createTask: builder.mutation<Task, void>({
+            queryFn: async () => {
+                const { data, error } = await supabase.from("tasks").insert({}).select("*").single();
                 if (error) throw error;
                 return { data };
             },
@@ -96,7 +96,7 @@ export const supabaseApi = createApi({
                 if (error) throw error;
                 return { data };
             },
-            invalidatesTags: (result, error, { id, formula }) => [{ type: "Task", id }]
+            invalidatesTags: ["Task"]
         }),
         getOptions: builder.query<Option[], string>({
             queryFn: async (task) => {
@@ -128,12 +128,13 @@ export const supabaseApi = createApi({
                 if (error) throw error;
                 return { data };
             },
-            providesTags: ["Option"],
+            providesTags: ["Option", "Task"],
         }),
-        createOption: builder.mutation<Option, Option>({
-            queryFn: async (option) => {
+        createOption: builder.mutation<Option, void>({
+            queryFn: async () => {
+                console.log("created option");
                 const { data, error } = await supabase
-                    .from("options").insert(option).select("*").single();
+                    .from("options").insert({}).select("*").single();
                 if (error) throw error;
                 return { data };
             },
@@ -146,16 +147,16 @@ export const supabaseApi = createApi({
                 if (error) throw error;
                 return { data };
             },
-            invalidatesTags: (result, error, { id, formula }) => [{ type: "Option", id }],
+            invalidatesTags: ["Option"]
         }),
-        setOptionIsRight: builder.mutation<Option, { id: string, is_right: string }>({
+        setOptionIsRight: builder.mutation<Option, { id: string, is_right: boolean }>({
             queryFn: async ({ id, is_right }) => {
                 const { data, error } = await supabase
                     .from("options").update({ is_right }).eq("id", id).select().single();
                 if (error) throw error;
                 return { data };
             },
-            invalidatesTags: (result, error, { id, is_right }) => [{ type: "Option", id }],
+            invalidatesTags: ["Option"]
         })
     })
 });

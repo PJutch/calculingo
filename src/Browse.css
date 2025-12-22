@@ -21,10 +21,15 @@
     flex-direction: column;
     border: 2px solid lightgrey;
     background-color: lightgrey;
-    border-bottom-width: 0;
+}
+
+.collection-container {
+    display: flex;
+    width: 100%;
 }
 
 .collection {
+    flex-grow: 1;
     font-family: Inter;
     font-size: 30px;
     margin: 1px 1px;
@@ -33,4 +38,21 @@
     border-radius: 10px;
     border-style: solid;
     background-color: white;
+}
+
+.add-collection-button {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: 30px;
+    border-radius: 10px;
+}
+
+.edit-icon {
+    margin-left: -55px;
+    margin-right: 10px;
+    opacity: 0;
+}
+
+.edit-icon:hover {
+    opacity: 1;
 }

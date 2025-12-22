@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import './Browse.css';
 import { useNavigate } from "react-router-dom";
-import { useGetCollectionsQuery } from "./tasks";
+import { useCreateCollectionMutation, useGetCollectionsQuery } from "./tasks";
 
 function Browse(): React.JSX.Element {
     const navigate = useNavigate();
 
     const [query, setQuery] = useState<string>();
 
-    const {data: collections, error, isLoading} = useGetCollectionsQuery();
+    const { data: collections, error, isLoading } = useGetCollectionsQuery();
+
+    const [createCollection, createCollectionStatus] = useCreateCollectionMutation();
+
     if (isLoading) return (<p>Loading...</p>);
     if (collections === undefined) throw error || new Error("failed to load collections, reason unknown");
 
@@ -17,9 +20,15 @@ function Browse(): React.JSX.Element {
         <div className="collections">
             {collections.filter(collection => query == undefined || query === "" || collection.name.includes(query))
                 .map(collection =>
-                    <button className="collection" onClick={() => navigate(`/solve/${collection.id}`)}>
-                        {collection.name}</button>)}
+                    <div className="collection-container">
+                        <button className="collection" onClick={() => navigate(`/solve/${collection.id}`)}>
+                            {collection.name}</button>
+                        <svg viewBox="0 0 24 24" width="48" className="edit-icon"
+                            onClick={() => navigate(`/edit/${collection.id}`)}>
+                            <use href="/icons/edit.svg"></use></svg>
+                    </div>)}
         </div>
+        <button className="add-collection-button" onClick={() => createCollection()}>+</button>
     </div>);
 }
 
