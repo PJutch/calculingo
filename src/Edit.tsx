@@ -2,7 +2,10 @@ import { MathJax } from "better-react-mathjax";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import './Edit.css';
-import { useGetCollectionQuery, useGetTasksQuery, useGetOptionsQuery, useGetCollectionOptionsQuery, useSetCollectionNameMutation, useSetTaskFormulaMutation } from "./tasks";
+import {
+    useGetCollectionQuery, useGetTasksQuery, useSetOptionFormulaMutation,
+    useGetCollectionOptionsQuery, useSetCollectionNameMutation, useSetTaskFormulaMutation
+} from "./tasks";
 
 interface EditableH1Options {
     children: string,
@@ -82,7 +85,7 @@ function Edit(): React.JSX.Element {
 
     const [setCollectionName, updateCollectionStatus] = useSetCollectionNameMutation();
     const [setTaskFormula, updateTaskStatus] = useSetTaskFormulaMutation();
-    const [setOptionFormula, updateOptionStatus] = useSetTaskFormulaMutation();
+    const [setOptionFormula, updateOptionStatus] = useSetOptionFormulaMutation();
 
     if (isCollectionLoading || areTasksLoading || areOptionsLoading) {
         return (<p>Loading...</p>)
@@ -106,8 +109,7 @@ function Edit(): React.JSX.Element {
                     <EditableMathJax key={option.id} className={
                         option.is_right ? "formula option-formula option-right"
                             : "formula option-formula option-wrong"}
-                        // onEdit={newFormula => setOptionFormula({ id: option.id, formula: newFormula })}>
-                        >
+                        onEdit={newFormula => setOptionFormula({ id: option.id, formula: newFormula })}>
                         {option.formula}</EditableMathJax>)}
             </div>)}
         </div>

@@ -30,7 +30,8 @@ export const supabaseApi = createApi({
     endpoints: builder => ({
         getCollections: builder.query<Collection[], void>({
             queryFn: async () => {
-                const { data, error } = await supabase.from("collections").select("*");
+                const { data, error } = await supabase
+                    .from("collections").select("*").order("created_at").order("id");
                 if (error) throw error;
                 return { data };
             },
@@ -66,7 +67,7 @@ export const supabaseApi = createApi({
         getTasks: builder.query<Task[], string>({
             queryFn: async (collection) => {
                 const { data, error } = await supabase
-                    .from("tasks").select("*").eq("collection", collection);
+                    .from("tasks").select("*").eq("collection", collection).order("created_at").order("id");
                 if (error) throw error;
                 return { data };
             },
@@ -89,7 +90,7 @@ export const supabaseApi = createApi({
             invalidatesTags: ["Task"]
         }),
         setTaskFormula: builder.mutation<Task, { id: string, formula: string }>({
-            queryFn: async ({id, formula}) => {
+            queryFn: async ({ id, formula }) => {
                 const { data, error } = await supabase
                     .from("tasks").update({ formula }).eq("id", id).select("*").single();
                 if (error) throw error;
@@ -100,7 +101,7 @@ export const supabaseApi = createApi({
         getOptions: builder.query<Option[], string>({
             queryFn: async (task) => {
                 const { data, error } = await supabase
-                    .from("options").select("*").eq("task", task);
+                    .from("options").select("*").eq("task", task).order("created_at").order("id");
                 if (error) throw error;
                 return { data };
             },
@@ -117,13 +118,15 @@ export const supabaseApi = createApi({
         }),
         getCollectionOptions: builder.query<Option[], string>({
             queryFn: async (collection) => {
-                const {data: tasks, error: taskError} = await supabase.from("tasks").select("id").eq("collection", collection);
+                const { data: tasks, error: taskError } = await supabase
+                    .from("tasks").select("id").eq("collection", collection);
                 if (taskError) throw taskError;
 
                 const { data, error } = await supabase
-                    .from("options").select("*").in("task", tasks.map(task => task.id));
+                    .from("options").select("*").in("task", tasks.map(task => task.id))
+                    .order("created_at").order("id");
                 if (error) throw error;
-                return {data};
+                return { data };
             },
             providesTags: ["Option"],
         }),
@@ -137,7 +140,7 @@ export const supabaseApi = createApi({
             invalidatesTags: ["Option"]
         }),
         setOptionFormula: builder.mutation<Option, { id: string, formula: string }>({
-            queryFn: async ({id, formula}) => {
+            queryFn: async ({ id, formula }) => {
                 const { data, error } = await supabase
                     .from("options").update({ formula }).eq("id", id).select().single();
                 if (error) throw error;
