@@ -5,18 +5,19 @@ import { configureStore } from "@reduxjs/toolkit";
 interface Collection {
     id: string,
     name: string,
-    tasks: { [key: number]: Task }
 }
 
 interface Task {
     id: string,
     formula: string,
+    collection: string
 }
 
 interface Option {
     id: string,
     formula: string,
     is_right: boolean
+    task: string
 }
 
 export const supabaseApi = createApi({
@@ -87,8 +88,8 @@ export const supabaseApi = createApi({
             },
             invalidatesTags: ["Task"]
         }),
-        setFormula: builder.mutation<Task, { id: string, formula: string }>({
-            queryFn: async (id, formula) => {
+        setTaskFormula: builder.mutation<Task, { id: string, formula: string }>({
+            queryFn: async ({id, formula}) => {
                 const { data, error } = await supabase
                     .from("tasks").update({ formula }).eq("id", id).select("*").single();
                 if (error) throw error;
@@ -114,6 +115,18 @@ export const supabaseApi = createApi({
             },
             providesTags: ["Option"],
         }),
+        getCollectionOptions: builder.query<Option[], string>({
+            queryFn: async (collection) => {
+                const {data: tasks, error: taskError} = await supabase.from("tasks").select("id").eq("collection", collection);
+                if (taskError) throw taskError;
+
+                const { data, error } = await supabase
+                    .from("options").select("*").in("task", tasks.map(task => task.id));
+                if (error) throw error;
+                return {data};
+            },
+            providesTags: ["Option"],
+        }),
         createOption: builder.mutation<Option, Option>({
             queryFn: async (option) => {
                 const { data, error } = await supabase
@@ -124,7 +137,7 @@ export const supabaseApi = createApi({
             invalidatesTags: ["Option"]
         }),
         setOptionFormula: builder.mutation<Option, { id: string, formula: string }>({
-            queryFn: async (id, formula) => {
+            queryFn: async ({id, formula}) => {
                 const { data, error } = await supabase
                     .from("options").update({ formula }).eq("id", id).select().single();
                 if (error) throw error;
@@ -152,8 +165,10 @@ export const {
     useGetTasksQuery,
     useGetTaskQuery,
     useCreateTaskMutation,
-    useSetFormulaMutation,
+    useSetTaskFormulaMutation,
     useGetOptionsQuery,
+    useGetOptionQuery,
+    useGetCollectionOptionsQuery,
     useCreateOptionMutation,
     useSetOptionFormulaMutation,
     useSetOptionIsRightMutation,

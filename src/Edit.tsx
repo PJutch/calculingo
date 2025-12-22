@@ -2,60 +2,12 @@ import { MathJax } from "better-react-mathjax";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import './Edit.css';
-import { useGetCollectionsQuery } from "./tasks";
-
-interface Collection {
-    name: string,
-    tasks: { [key: string]: Task }
-}
-
-interface Task {
-    formula: string
-    options: {
-        formula: string
-        is_right: boolean
-    }[]
-}
-
-const collections: { [key: string]: Collection } = {
-    "test1": {
-        name: "Test collection",
-        tasks: {
-            "task1": {
-                formula: "\\sqrt x",
-                options: [
-                    { formula: "\\sqrt x", is_right: true },
-                    { formula: "\\sqrt y", is_right: false },
-                    { formula: "\\sqrt y", is_right: false },
-                    { formula: "\\sqrt y", is_right: false },
-                ]
-            },
-            "task2": {
-                formula: "\\ln x",
-                options: [
-                    { formula: "\\ln x", is_right: true },
-                    { formula: "\\ln y", is_right: false },
-                    { formula: "\\ln y", is_right: false },
-                    { formula: "\\ln y", is_right: false },
-                ]
-            },
-            "task3": {
-                formula: "\\frac 1 2",
-                options: [
-                    { formula: "\\frac 1 2", is_right: true },
-                    { formula: "\\frac 2 3", is_right: false },
-                    { formula: "\\frac 3 4", is_right: false },
-                    { formula: "\\frac 5 {10}", is_right: true },
-                ]
-            }
-        }
-    }
-};
+import { useGetCollectionQuery, useGetTasksQuery, useGetOptionsQuery, useGetCollectionOptionsQuery, useSetCollectionNameMutation, useSetTaskFormulaMutation } from "./tasks";
 
 interface EditableH1Options {
     children: string,
     className: string,
-    onEdit?: () => void
+    onEdit?: (newValue: string) => void
 }
 
 function EditableH1({ children, className, onEdit }: EditableH1Options): React.JSX.Element {
@@ -65,7 +17,7 @@ function EditableH1({ children, className, onEdit }: EditableH1Options): React.J
     if (onEdit !== undefined) {
         useEffect(() => {
             if (!isEditing) {
-                onEdit();
+                onEdit(text);
             }
         }, [isEditing]);
     }
@@ -86,7 +38,7 @@ function EditableH1({ children, className, onEdit }: EditableH1Options): React.J
 interface EditableMathJaxOptions {
     children: string | string[],
     className: string,
-    onEdit?: () => void
+    onEdit?: (newValue: string) => void
 }
 
 function EditableMathJax({ children, className, onEdit }: EditableMathJaxOptions): React.JSX.Element {
@@ -100,7 +52,7 @@ function EditableMathJax({ children, className, onEdit }: EditableMathJaxOptions
     if (onEdit !== undefined) {
         useEffect(() => {
             if (!isEditing) {
-                onEdit();
+                onEdit(text);
             }
         }, [isEditing]);
     }
@@ -119,20 +71,44 @@ function EditableMathJax({ children, className, onEdit }: EditableMathJaxOptions
 }
 
 function Edit(): React.JSX.Element {
-    const { collection } = useParams();
-    if (collection === undefined) {
+    const { collection: collectionId } = useParams();
+    if (collectionId === undefined) {
         throw new Error("Undefined collection id");
     }
 
+    const { data: collection, error: collectionError, isLoading: isCollectionLoading } = useGetCollectionQuery(collectionId);
+    const { data: tasks, error: taskError, isLoading: areTasksLoading } = useGetTasksQuery(collectionId);
+    const { data: options, error: optionError, isLoading: areOptionsLoading } = useGetCollectionOptionsQuery(collectionId);
+
+    const [setCollectionName, updateCollectionStatus] = useSetCollectionNameMutation();
+    const [setTaskFormula, updateTaskStatus] = useSetTaskFormulaMutation();
+    const [setOptionFormula, updateOptionStatus] = useSetTaskFormulaMutation();
+
+    if (isCollectionLoading || areTasksLoading || areOptionsLoading) {
+        return (<p>Loading...</p>)
+    }
+
+    if (collection === undefined) throw collectionError || new Error("Fetching collection failed, reason unknown");
+    if (tasks === undefined) throw taskError || new Error("Fetching tasks failed, reason unknown");
+    if (options === undefined) throw optionError || new Error("Fetching options failed, reason unknown");
+
+    const optionsByTask = Object.groupBy(options, option => option.task);
+
     return (<div className="edit-container">
-        <EditableH1 className="title">{collections[collection].name}</EditableH1>
+        <EditableH1 className="title" onEdit={newName => setCollectionName({ id: collectionId, name: newName })}>
+            {collection.name}</EditableH1>
         <div className="tasks">
-            {Object.entries(collections[collection].tasks).map(([taskId, task]) => <div className="task">
-                <EditableMathJax className="formula task-formula">{task.formula}</EditableMathJax>
-                {task.options.map(option =>
-                    <EditableMathJax className={
+            {tasks.map((task) => <div className="task" key={task.id}>
+                <EditableMathJax className="formula task-formula"
+                    onEdit={newFormula => setTaskFormula({ id: task.id, formula: newFormula })}>
+                    {task.formula}</EditableMathJax>
+                {optionsByTask[task.id]?.map(option =>
+                    <EditableMathJax key={option.id} className={
                         option.is_right ? "formula option-formula option-right"
-                            : "formula option-formula option-wrong"}>{option.formula}</EditableMathJax>)}
+                            : "formula option-formula option-wrong"}
+                        // onEdit={newFormula => setOptionFormula({ id: option.id, formula: newFormula })}>
+                        >
+                        {option.formula}</EditableMathJax>)}
             </div>)}
         </div>
     </div>)
