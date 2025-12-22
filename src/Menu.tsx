@@ -4,9 +4,6 @@ import { MathJax } from 'better-react-mathjax';
 import './Menu.css';
 import { useNavigate } from 'react-router-dom';
 
-const tasks = await supabase.from("tasks").select('*');
-console.log(tasks);
-
 interface Collection {
   id: string;
   name: string;

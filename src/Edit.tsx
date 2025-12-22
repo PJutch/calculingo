@@ -2,6 +2,7 @@ import { MathJax } from "better-react-mathjax";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import './Edit.css';
+import { useGetCollectionsQuery } from "./tasks";
 
 interface Collection {
     name: string,

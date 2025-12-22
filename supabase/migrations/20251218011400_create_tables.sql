@@ -1,14 +1,14 @@
-CREATE TABLE collections (id BIGSERIAL PRIMARY KEY, name TEXT NOT NULL);
+CREATE TABLE collections (id TEXT PRIMARY KEY, name TEXT NOT NULL);
 
 CREATE TABLE tasks (
-    id BIGSERIAL PRIMARY KEY, 
+    id TEXT PRIMARY KEY, 
     formula TEXT NOT NULL, 
-    collection REFERENCES collections(id)
+    collection TEXT REFERENCES collections(id)
 );
 
 CREATE TABLE options (
-    id BIGSERIAL PRIMARY KEY,
+    id TEXT PRIMARY KEY,
     formula TEXT NOT NULL,
     is_right BOOLEAN NOT NULL, 
-    task REFERENCES tasks(id)
+    task TEXT REFERENCES tasks(id)
 );
