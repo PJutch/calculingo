@@ -2,78 +2,51 @@ import { MathJax } from "better-react-mathjax";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, Link, useLocation } from "react-router-dom";
 import './Task.css';
-
-interface Task {
-    formula: string,
-    options: {
-        formula: string,
-        is_right: boolean
-    }[]
-}
-
-const tasks: { [key: string]: { [key: string]: Task } } = {
-    "integrals": {
-        "task1": {
-            formula: "\\int x dx",
-            options: [
-                { formula: "\\frac {x^2} 2 + C", is_right: true },
-                { formula: "\\frac {x^2} 3 + C", is_right: false },
-                { formula: "x^2 + C", is_right: false },
-                { formula: "\\frac {x^3} 2 + C", is_right: false },
-            ]
-        },
-        "task2": {
-            formula: "\\int \\frac 1 {x(x+1)} dx",
-            options: [
-                { formula: "\\ln \\frac x {x+1} + C", is_right: true },
-                { formula: "\\ln \\frac x {x-1} + C", is_right: false },
-                { formula: "\\ln \\frac {x+1} x + C", is_right: false },
-                { formula: "\\arctan x + C", is_right: false },
-            ]
-        }
-    }
-};
+import { useGetOptionsQuery, useGetTaskQuery, useGetTasksQuery } from "./tasks";
 
 function Task(): React.JSX.Element {
-    const [selected, setSelected] = useState<number | null>();
+    const [selected, setSelected] = useState<string | null>(null);
 
     const location = useLocation();
     useEffect(() => setSelected(null), [location])
 
-    const { collection, task } = useParams();
-    if (collection === undefined || task === undefined) {
+    const { collection: collectionId, task: taskId } = useParams();
+    if (collectionId === undefined || taskId === undefined) {
         throw new Error("Undefined path params");
     }
 
-    const { formula, options } = tasks[collection][task];
+    const { data: task, error: taskError, isLoading: isTaskLoading } = useGetTaskQuery(taskId);
+    const { data: options, error: optionError, isLoading: areOptionsLoading } = useGetOptionsQuery(taskId);
 
-    function isSolved(): boolean {
-        return selected !== null && selected !== undefined;
-    }
+    if (isTaskLoading || areOptionsLoading) return (<p>Loading...</p>);
 
-    function isRight(): boolean {
-        return selected !== null && selected !== undefined && options[selected].is_right;
-    }
+    if (task === undefined) throw taskError || new Error("failed to load tasks, reason unknown");
+    if (options === undefined) throw optionError || new Error("failed to load options, reason unknown");
+
+    const optionsById = Object.fromEntries(options.map(option => [option.id, option]));
+
+    const isSolved = selected !== null;
+    const isRight = isSolved && optionsById[selected].is_right;
 
     return (<div className="task-container">
-        <MathJax className="task-formula">\(\displaystyle{formula}\)</MathJax>
-        {options.map((option, i) => {
+        <MathJax className="task-formula">\(\displaystyle{task.formula}\)</MathJax>
+        {options.map((option) => {
             let style;
-            if (isSolved() && option.is_right) {
+            if (isSolved && option.is_right) {
                 style = "option option-green";
-            } else if (selected == i) {
+            } else if (selected === option.id) {
                 style = "option option-red";
             } else {
                 style = "option";
             }
 
-            return <button className={style} onClick={() => setSelected(i)}>
+            return <button className={style} onClick={() => setSelected(option.id)}>
                 <MathJax>\(\displaystyle {option.formula}\)</MathJax>
             </button>
         })}
-        <Link to={`/solve/${collection}`} className="next-wrapper" replace>
-            <button className={isRight() ? "next next-green" : "next"}>
-                {isSolved() ? "Далее" : "Пропустить"}</button></Link>
+        <Link to={`/solve/${collectionId}`} className="next-wrapper" replace>
+            <button className={isRight ? "next next-green" : "next"}>
+                {isSolved ? "Далее" : "Пропустить"}</button></Link>
     </div>);
 }
 
@@ -84,7 +57,6 @@ function selectRandom<T>(options: T[]): T {
 }
 
 export function RandomTaskRedirect() {
-    console.log("redirect");
     const navigate = useNavigate();
 
     const { collection } = useParams();
@@ -92,9 +64,14 @@ export function RandomTaskRedirect() {
         throw new Error("undefined collection id");
     }
 
+    const {data: tasks, error, isLoading} = useGetTasksQuery(collection);
+
     useEffect(() => {
-        const taskId = selectRandom(Object.keys(tasks[collection]));
-        navigate(`/solve/${collection}/${taskId}`, {replace: true});
-    });
+        if (isLoading) return;
+        if (tasks === undefined) throw error || new Error("failed to load tasks, reason unknown");
+
+        const task = selectRandom(tasks);
+        navigate(`/solve/${collection}/${task.id}`, { replace: true });
+    }, [isLoading]);
     return null;
 }
