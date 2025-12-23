@@ -130,13 +130,9 @@ function Edit(): React.JSX.Element {
                                 : "formula option-formula option-wrong"}
                             onEdit={newFormula => setOptionFormula({ id: option.id, formula: newFormula })}>
                             {option.formula}</EditableMathJax>
-                        <svg viewBox="0 0 24 24" width="48" className="delete-icon"
-                            onClick={() => deleteOption(option.id)}>
-                            <use href="/icons/trash.svg"></use></svg>
                     </div>)}
-                <button className="add-option-button" onClick={() => createOption(task.id)}>+</button>
             </div>)}
-            <button className="add-task-button" onClick={() => createTask(collection.id)}>+</button>
+            <button className="add-task-button" onClick={() => createTask(collectionId)}>+</button>
         </div>
     </div>)
 }

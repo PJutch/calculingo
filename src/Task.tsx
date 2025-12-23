@@ -23,7 +23,7 @@ function Task(): React.JSX.Element {
     if (task === undefined) throw taskError || new Error("failed to load tasks, reason unknown");
     if (options === undefined) throw optionError || new Error("failed to load options, reason unknown");
 
-    const optionsById = Object.fromEntries(options.map(option => [option.id, option]));
+    const optionsById = Object.fromEntries(options.slice(0, 4).map(option => [option.id, option]));
 
     const isSolved = selected !== null;
     const isRight = isSolved && optionsById[selected].is_right;

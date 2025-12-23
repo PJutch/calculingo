@@ -9,7 +9,7 @@ CREATE TABLE collections (
 CREATE TABLE tasks (
     id TEXT PRIMARY KEY DEFAULT uuid_generate_v4()::TEXT, 
     formula TEXT NOT NULL DEFAULT '', 
-    collection TEXT REFERENCES collections(id),
+    collection TEXT REFERENCES collections(id) ON DELETE CASCADE,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
@@ -17,6 +17,6 @@ CREATE TABLE options (
     id TEXT PRIMARY KEY DEFAULT uuid_generate_v4()::TEXT,
     formula TEXT NOT NULL DEFAULT '',
     is_right BOOLEAN NOT NULL DEFAULT FALSE, 
-    task TEXT REFERENCES tasks(id),
+    task TEXT REFERENCES tasks(id) ON DELETE CASCADE,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
