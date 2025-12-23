@@ -15,7 +15,7 @@ if (!root) throw new Error('Root element not found');
 ReactDOM.createRoot(root).render(
   <React.StrictMode>
     <Provider store={store}>
-      <BrowserRouter>
+      <BrowserRouter basename={import.meta.env.VITE_BASE_URL}>
         <MathJaxContext>
           <Routes>
             <Route path="/" element={<Menu />} />
