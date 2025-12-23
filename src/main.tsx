@@ -19,7 +19,7 @@ ReactDOM.createRoot(root).render(
       <BrowserRouter basename={import.meta.env.VITE_BASE_URL}>
         <MathJaxContext config={{
           options: {
-            enableMenu: false,
+            // enableMenu: false,
             menuOptions: { settings: { speech: false, braille: false } }
           }
         }} version={4}>

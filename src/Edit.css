@@ -8,7 +8,7 @@
 
 .title {
     text-align: center;
-    font-size: 70px;
+    font-family: Inter;
 }
 
 .tasks {
@@ -23,7 +23,6 @@
 }
 
 .formula {
-    font-size: 50px;
     text-align: center;
 }
 
@@ -86,6 +85,16 @@
 }
 
 @media (min-width: 769px) {
+    .title {
+        font-size: 70px;
+    }
+
+    .formula {
+        font-size: 50px;
+    }
+}
+
+@media (hover: hover) {
     .delete-icon {
         opacity: 0;
         transition: opacity 0.2s ease;
@@ -93,5 +102,15 @@
 
     .row-container:hover .delete-icon {
         opacity: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .title {
+        font-size: 30px;
+    }
+
+    .formula {
+        font-size: 30px;
     }
 }

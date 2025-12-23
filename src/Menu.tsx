@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { MathJax } from 'better-react-mathjax';
-import './Menu.css';
+import styles from './Menu.module.css';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 interface Collection {
@@ -24,20 +24,20 @@ function Menu(): React.JSX.Element {
   const navigate = useNavigate();
 
   return (
-    <div className='menu-wrapper'>
-      <h1 className='title'>Calculingo</h1>
-      <div className='buttons'>
+    <div className={styles["menu-wrapper"]}>
+      <h1 className={styles.title}>Calculingo</h1>
+      <div className={styles.buttons}>
         {premade_collections.map((collection) =>
-          <button className='button' onClick={() => navigate(`/solve/${collection.id}`)}>
-            <p className='preview'>
+          <button className={styles.button} onClick={() => navigate(`/solve/${collection.id}`)}>
+            <p className={styles.preview}>
               <MathJax>\({collection.previewLatex}\)</MathJax>
             </p>
-            <p className='name'>{collection.name}</p>
+            <p className={styles.name}>{collection.name}</p>
           </button>)
         }
       </div>
-      <div className='browse-wrapper'>
-        <button className='browse' onClick={() => navigate("/browse")}>Искать...</button>
+      <div className={styles['browse-wrapper']}>
+        <button className={styles.browse} onClick={() => navigate("/browse")}>Искать...</button>
       </div>
     </div>
   );
