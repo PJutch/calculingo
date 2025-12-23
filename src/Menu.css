@@ -40,7 +40,6 @@
 }
 
 .preview {
-    font-size: 35px;
     margin: 0;
 }
 
@@ -60,4 +59,16 @@
     border-radius: 20px;
     font-family: Inter;
     font-size: 70px;
+}
+
+@media (min-width: 769px) {
+    .preview {
+        font-size: 35px;
+    }
+}
+
+@media (max-width: 768px) {
+    .preview {
+        font-size: 25px;
+    }
 }

@@ -49,18 +49,23 @@
 
 .collection-delete-icon {
     margin-left: -100px;
-    opacity: 0;
 }
 
 .edit-icon {
     margin-right: 10px;
-    opacity: 0;
 }
 
-.collection-container:hover .edit-icon {
-    opacity: 1;
-}
+@media (min-width: 769px) {
+    .collection-delete-icon, .edit-icon {
+        opacity: 0;
+        transition: opacity 0.2s ease;
+    }
 
-.collection-container:hover .collection-delete-icon {
-    opacity: 1;
+    .collection-container:hover .edit-icon {
+        opacity: 1;
+    }
+
+    .collection-container:hover .collection-delete-icon {
+        opacity: 1;
+    }
 }

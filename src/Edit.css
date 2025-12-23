@@ -83,10 +83,15 @@
 .delete-icon {
     margin-left: -55px;
     margin-right: 5px;
-    opacity: 0;
-    transition: opacity 0.2s ease;
 }
 
-.row-container:hover .delete-icon {
-    opacity: 1;
+@media (min-width: 769px) {
+    .delete-icon {
+        opacity: 0;
+        transition: opacity 0.2s ease;
+    }
+
+    .row-container:hover .delete-icon {
+        opacity: 1;
+    }
 }
