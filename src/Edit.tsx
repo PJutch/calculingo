@@ -5,7 +5,9 @@ import './Edit.css';
 import {
     useGetCollectionQuery, useGetTasksQuery, useSetOptionFormulaMutation,
     useGetCollectionOptionsQuery, useSetCollectionNameMutation, useSetTaskFormulaMutation,
-    useSetOptionIsRightMutation, useCreateOptionMutation, useCreateTaskMutation
+    useSetOptionIsRightMutation, useCreateOptionMutation, useCreateTaskMutation,
+    useDeleteOptionMutation,
+    useDeleteTaskMutation
 } from "./tasks";
 
 interface EditableH1Options {
@@ -87,9 +89,11 @@ function Edit(): React.JSX.Element {
     const [setCollectionName, updateCollectionStatus] = useSetCollectionNameMutation();
     const [setTaskFormula, updateTaskStatus] = useSetTaskFormulaMutation();
     const [createTask, createTaskStatus] = useCreateTaskMutation();
+    const [deleteTask, deleteTaskStatus] = useDeleteTaskMutation();
     const [setOptionFormula, updateOptionStatus] = useSetOptionFormulaMutation();
     const [setOptionIsRight, setOptionIsRightStatus] = useSetOptionIsRightMutation();
     const [createOption, createOptionStatus] = useCreateOptionMutation();
+    const [deleteOption, deleteOptionStatus] = useDeleteOptionMutation();
 
     if (isCollectionLoading || areTasksLoading || areOptionsLoading) {
         return (<p>Loading...</p>)
@@ -111,7 +115,7 @@ function Edit(): React.JSX.Element {
                         onEdit={newFormula => setTaskFormula({ id: task.id, formula: newFormula })}>
                         {task.formula}</EditableMathJax>
                     <svg viewBox="0 0 24 24" width="48" className="delete-icon"
-                        onClick={() => { }}>
+                        onClick={() => deleteTask(task.id)}>
                         <use href="/icons/trash.svg"></use></svg>
                 </div>
                 {optionsByTask[task.id]?.map(option =>
@@ -127,12 +131,12 @@ function Edit(): React.JSX.Element {
                             onEdit={newFormula => setOptionFormula({ id: option.id, formula: newFormula })}>
                             {option.formula}</EditableMathJax>
                         <svg viewBox="0 0 24 24" width="48" className="delete-icon"
-                            onClick={() => { }}>
+                            onClick={() => deleteOption(option.id)}>
                             <use href="/icons/trash.svg"></use></svg>
                     </div>)}
-                <button className="add-option-button" onClick={() => createOption()}>+</button>
+                <button className="add-option-button" onClick={() => createOption(task.id)}>+</button>
             </div>)}
-            <button className="add-task-button" onClick={() => createTask()}>+</button>
+            <button className="add-task-button" onClick={() => createTask(collection.id)}>+</button>
         </div>
     </div>)
 }
