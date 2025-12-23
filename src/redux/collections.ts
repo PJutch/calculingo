@@ -35,7 +35,7 @@ export const collectionsApi = createApi({
         createCollection: builder.mutation<Collection, void>({
             queryFn: async () => {
                 const { data: collection, error } = await supabase
-                    .from("collections").insert({}).select("*").single();
+                    .from("collections").insert({name: "Новая коллекция"}).select("*").single();
                 if (error) throw error;
 
                 const { data: task, error: taskError } = await supabase

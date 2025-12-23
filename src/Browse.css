@@ -53,6 +53,6 @@
     opacity: 0;
 }
 
-.edit-icon:hover {
+.collection-container:hover .edit-icon {
     opacity: 1;
 }

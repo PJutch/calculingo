@@ -87,6 +87,6 @@
     transition: opacity 0.2s ease;
 }
 
-.delete-icon:hover {
+.row-container:hover .delete-icon {
     opacity: 1;
 }
