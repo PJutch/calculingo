@@ -2,13 +2,10 @@ import { MathJax } from "better-react-mathjax";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import './Edit.css';
-import {
-    useGetCollectionQuery, useGetTasksQuery, useSetOptionFormulaMutation,
-    useGetCollectionOptionsQuery, useSetCollectionNameMutation, useSetTaskFormulaMutation,
-    useSetOptionIsRightMutation, useCreateOptionMutation, useCreateTaskMutation,
-    useDeleteOptionMutation,
-    useDeleteTaskMutation
-} from "./tasks";
+import { useGetCollectionQuery, useSetCollectionNameMutation } from "./redux/collections";
+import { useGetTasksQuery, useCreateTaskMutation, useDeleteTaskMutation, useSetTaskFormulaMutation } from './redux/tasks';
+import { useCreateOptionMutation, useDeleteOptionMutation, useGetCollectionOptionsQuery,
+     useSetOptionFormulaMutation, useSetOptionIsRightMutation } from './redux/options';
 
 interface EditableH1Options {
     children: string,

@@ -2,7 +2,8 @@ import { MathJax } from "better-react-mathjax";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, Link, useLocation } from "react-router-dom";
 import './Task.css';
-import { useGetOptionsQuery, useGetTaskQuery, useGetTasksQuery } from "./tasks";
+import { useGetTaskQuery, useGetTasksQuery } from "./redux/tasks";
+import { useGetOptionsQuery } from "./redux/options";
 
 function Task(): React.JSX.Element {
     const [selected, setSelected] = useState<string | null>(null);

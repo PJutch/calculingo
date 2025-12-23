@@ -1,5 +1,4 @@
 import React from 'react';
-import { supabase } from '../supabase/client';
 import { MathJax } from 'better-react-mathjax';
 import './Menu.css';
 import { useNavigate } from 'react-router-dom';

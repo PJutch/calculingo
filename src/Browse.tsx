@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import './Browse.css';
 import { useNavigate } from "react-router-dom";
-import { useCreateCollectionMutation, useGetCollectionsQuery } from "./tasks";
+import { useCreateCollectionMutation, useGetCollectionsQuery } from "./redux/collections";
 
 function Browse(): React.JSX.Element {
     const navigate = useNavigate();
