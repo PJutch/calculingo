@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import './Browse.css';
 import { useNavigate } from "react-router-dom";
-import { useCreateCollectionMutation, useGetCollectionsQuery } from "./redux/collections";
+import { useCreateCollectionMutation, useDeleteCollectionMutation, useGetCollectionsQuery } from "./redux/collections";
 
 function Browse(): React.JSX.Element {
     const navigate = useNavigate();
@@ -11,6 +11,7 @@ function Browse(): React.JSX.Element {
     const { data: collections, error, isLoading } = useGetCollectionsQuery();
 
     const [createCollection, createCollectionStatus] = useCreateCollectionMutation();
+    const [deleteCollection, deleteCollectionStatus] = useDeleteCollectionMutation();
 
     if (isLoading) return (<p>Loading...</p>);
     if (collections === undefined) throw error || new Error("failed to load collections, reason unknown");
@@ -23,6 +24,9 @@ function Browse(): React.JSX.Element {
                     <div className="collection-container">
                         <button className="collection" onClick={() => navigate(`/solve/${collection.id}`)}>
                             {collection.name}</button>
+                        <svg viewBox="0 0 24 24" width="48" className="collection-delete-icon"
+                            onClick={() => deleteCollection(collection.id)}>
+                            <use href="/icons/trash.svg"></use></svg>
                         <svg viewBox="0 0 24 24" width="48" className="edit-icon"
                             onClick={() => navigate(`/edit/${collection.id}`)}>
                             <use href="/icons/edit.svg"></use></svg>

@@ -47,12 +47,20 @@
     border-radius: 10px;
 }
 
+.collection-delete-icon {
+    margin-left: -100px;
+    opacity: 0;
+}
+
 .edit-icon {
-    margin-left: -55px;
     margin-right: 10px;
     opacity: 0;
 }
 
 .collection-container:hover .edit-icon {
+    opacity: 1;
+}
+
+.collection-container:hover .collection-delete-icon {
     opacity: 1;
 }

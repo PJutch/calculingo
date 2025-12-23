@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { version } from 'react';
 import ReactDOM from 'react-dom/client';
 import { MathJaxContext } from 'better-react-mathjax';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -8,6 +8,7 @@ import Browse from './Browse';
 import Edit from './Edit';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
+import '../env.d'
 
 const root = document.getElementById('root');
 if (!root) throw new Error('Root element not found');
@@ -16,7 +17,12 @@ ReactDOM.createRoot(root).render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter basename={import.meta.env.VITE_BASE_URL}>
-        <MathJaxContext>
+        <MathJaxContext config={{
+          options: {
+            enableMenu: false,
+            menuOptions: { settings: { speech: false, braille: false } }
+          }
+        }} version={4}>
           <Routes>
             <Route path="/" element={<Menu />} />
             <Route path="/solve/:collection/:task" element={<Task />} />
