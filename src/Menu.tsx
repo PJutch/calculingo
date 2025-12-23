@@ -16,9 +16,9 @@ function Menu(): React.JSX.Element {
     { id: "limits", name: "Пределы", previewLatex: "\\displaystyle \\lim_{n \\to \\infty}{\\left( 1 + \\frac 1 n \\right)^n}" },
     { id: "tailor", name: "Тейлор", previewLatex: "\\sqrt{2}" },
     { id: "rows", name: "Ряды", previewLatex: "\\sqrt{2}" },
-    { id: "placeholder1", name: "Placeholder", previewLatex: "\\sqrt{2}" },
-    { id: "placeholder2", name: "Placeholder", previewLatex: "\\sqrt{2}" },
-    { id: "placeholder3", name: "Placeholder", previewLatex: "\\sqrt{2}" },
+    { id: "multiple_integrals", name: "Кратные интегралы", previewLatex: "\\iint\\limits_D dx\\,dy" },
+    { id: "diff", name: "Дифференцирование", previewLatex: "\\frac{d}{dx}x^2" },
+    { id: "complex", name: "Комплексные числа", previewLatex: "e^{i\\pi}" },
   ];
 
   const navigate = useNavigate();
