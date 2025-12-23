@@ -6,6 +6,7 @@ import { useGetCollectionQuery, useSetCollectionNameMutation } from "./redux/col
 import { useGetTasksQuery, useCreateTaskMutation, useDeleteTaskMutation, useSetTaskFormulaMutation } from './redux/tasks';
 import { useCreateOptionMutation, useDeleteOptionMutation, useGetCollectionOptionsQuery,
      useSetOptionFormulaMutation, useSetOptionIsRightMutation } from './redux/options';
+import useIcon from "./useIcon";
 
 interface EditableH1Options {
     children: string,
@@ -89,8 +90,10 @@ function Edit(): React.JSX.Element {
     const [deleteTask, deleteTaskStatus] = useDeleteTaskMutation();
     const [setOptionFormula, updateOptionStatus] = useSetOptionFormulaMutation();
     const [setOptionIsRight, setOptionIsRightStatus] = useSetOptionIsRightMutation();
-    const [createOption, createOptionStatus] = useCreateOptionMutation();
-    const [deleteOption, deleteOptionStatus] = useDeleteOptionMutation();
+
+    const checkIcon = useIcon("check.svg");
+    const xIcon = useIcon("x.svg");
+    const trashIcon = useIcon("trash.svg");
 
     if (isCollectionLoading || areTasksLoading || areOptionsLoading) {
         return (<p>Loading...</p>)
@@ -113,7 +116,7 @@ function Edit(): React.JSX.Element {
                         {task.formula}</EditableMathJax>
                     <svg viewBox="0 0 24 24" width="48" className="delete-icon"
                         onClick={() => deleteTask(task.id)}>
-                        <use href="/icons/trash.svg"></use></svg>
+                        <use href={trashIcon}></use></svg>
                 </div>
                 {optionsByTask[task.id]?.map(option =>
                     <div className="row-container">
@@ -121,7 +124,7 @@ function Edit(): React.JSX.Element {
                             onClick={() => {
                                 setOptionIsRight({ id: option.id, is_right: !option.is_right });
                             }}>
-                            <use href={option.is_right ? "/icons/check.svg" : "/icons/x.svg"}></use></svg>
+                            <use href={option.is_right ? checkIcon : xIcon}></use></svg>
                         <EditableMathJax key={option.id} className={
                             option.is_right ? "formula option-formula option-right"
                                 : "formula option-formula option-wrong"}
