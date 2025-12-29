@@ -1,0 +1,36 @@
+.header {
+    margin: 0;
+    text-align: center;
+    font-size: 80px;
+    font-family: Inter;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    margin: 0 auto 0;
+}
+
+.label {
+    width: 100%;
+    font-family: Inter;
+    font-size: 20px;
+    margin-top: 10px;
+}
+
+.field {
+    width: 100%;
+    font-size: 20px;
+}
+
+.register {
+    text-align: center;
+    font-family: Inter;
+    margin-top: 10px;
+}
+
+.button {
+    margin: 10px 20px 0;
+    font-size: 25px;
+}

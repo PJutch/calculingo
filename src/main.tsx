@@ -9,6 +9,7 @@ import Edit from './Edit';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import '../env.d'
+import Login from './Login';
 
 const root = document.getElementById('root');
 if (!root) throw new Error('Root element not found');
@@ -29,6 +30,7 @@ ReactDOM.createRoot(root).render(
             <Route path="/solve/:collection" element={<RandomTaskRedirect />} />
             <Route path="/browse" element={<Browse />} />
             <Route path="/edit/:collection" element={<Edit />} />
+            <Route path="/login" element={<Login />} />
           </Routes>
         </MathJaxContext>
       </BrowserRouter>
