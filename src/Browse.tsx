@@ -3,6 +3,9 @@ import './Browse.css';
 import { useNavigate } from "react-router-dom";
 import { useCreateCollectionMutation, useDeleteCollectionMutation, useGetCollectionsQuery } from "./redux/collections";
 import useIcon from "./useIcon";
+import { useSelector } from "react-redux";
+import { StateType } from "./redux/store";
+import { User } from "@supabase/supabase-js";
 
 function Browse(): React.JSX.Element {
     const navigate = useNavigate();
@@ -13,6 +16,8 @@ function Browse(): React.JSX.Element {
 
     const [createCollection, createCollectionStatus] = useCreateCollectionMutation();
     const [deleteCollection, deleteCollectionStatus] = useDeleteCollectionMutation();
+
+    const user = useSelector<StateType, User | null>((state) => state.auth.user);
 
     const trashIcon = useIcon('trash.svg');
     const editIcon = useIcon('edit.svg');
@@ -28,15 +33,31 @@ function Browse(): React.JSX.Element {
                     <div className="collection-container">
                         <button className="collection" onClick={() => navigate(`/solve/${collection.id}`)}>
                             {collection.name}</button>
-                        <svg viewBox="0 0 24 24" width="48" className="collection-delete-icon"
-                            onClick={() => deleteCollection(collection.id)}>
-                            <use href={trashIcon}></use></svg>
-                        <svg viewBox="0 0 24 24" width="48" className="edit-icon"
-                            onClick={() => navigate(`/edit/${collection.id}`)}>
-                            <use href={editIcon}></use></svg>
+                        {
+                            !user || user.id == collection.user_id ?
+                                <><svg viewBox="0 0 24 24" width="48" className="collection-delete-icon"
+                                    onClick={() => {
+                                        if (user) {
+                                            deleteCollection(collection.id)
+                                        } else {
+                                            navigate("/login");
+                                        }
+                                    }}>
+                                    <use href={trashIcon}></use></svg>
+                                    <svg viewBox="0 0 24 24" width="48" className="edit-icon"
+                                        onClick={() => navigate(user ? `/edit/${collection.id}` : "/login")}>
+                                        <use href={editIcon}></use></svg></>
+                                : ""
+                        }
                     </div>)}
         </div>
-        <button className="add-collection-button" onClick={() => createCollection()}>+</button>
+        <button className="add-collection-button" onClick={() => {
+            if (user) {
+                createCollection(user.id);
+            } else {
+                navigate("/login");
+            }
+        }}>+</button>
     </div>);
 }
 

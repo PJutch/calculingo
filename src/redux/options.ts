@@ -6,6 +6,7 @@ interface Option {
     formula: string,
     is_right: boolean
     task: string
+    user_id: string | null
 }
 
 export const optionsApi = createApi({

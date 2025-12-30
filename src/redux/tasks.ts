@@ -5,6 +5,7 @@ interface Task {
     id: string,
     formula: string,
     collection: string
+    user_id: string | null
 }
 
 export const tasksApi = createApi({
@@ -32,15 +33,15 @@ export const tasksApi = createApi({
             },
             providesTags: ["Task"]
         }),
-        createTask: builder.mutation<Task, string>({
-            queryFn: async (collection) => {
+        createTask: builder.mutation<Task, {collection: string, user_id: string}>({
+            queryFn: async ({collection, user_id}) => {
                 const { data: taskData, error } = await supabase
-                    .from("tasks").insert({ collection }).select("*").single();
+                    .from("tasks").insert({ collection, user_id }).select("*").single();
                 if (error) throw error;
 
                 for (let i = 0; i < 4; ++i) {
                     const { data: optionData, error: optionError } = await supabase
-                        .from("options").insert({ task: taskData.id }).select("*").single();
+                        .from("options").insert({ task: taskData.id, user_id }).select("*").single();
                     if (optionError) throw optionError;
                 }
 

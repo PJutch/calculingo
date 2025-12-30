@@ -15,4 +15,6 @@ export const store = configureStore({
         getMiddleware().concat(collectionsApi.middleware).concat(tasksApi.middleware).concat(optionsApi.middleware)
 })
 
+export type StateType = ReturnType<typeof store.getState>;
+
 initAuth(store);

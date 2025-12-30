@@ -1,12 +1,14 @@
 import { MathJax } from "better-react-mathjax";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import './Edit.css';
 import { useGetCollectionQuery, useSetCollectionNameMutation } from "./redux/collections";
 import { useGetTasksQuery, useCreateTaskMutation, useDeleteTaskMutation, useSetTaskFormulaMutation } from './redux/tasks';
-import { useCreateOptionMutation, useDeleteOptionMutation, useGetCollectionOptionsQuery,
-     useSetOptionFormulaMutation, useSetOptionIsRightMutation } from './redux/options';
+import { useGetCollectionOptionsQuery, useSetOptionFormulaMutation, useSetOptionIsRightMutation } from './redux/options';
 import useIcon from "./useIcon";
+import { useSelector } from "react-redux";
+import { StateType } from "./redux/store";
+import { User } from "@supabase/supabase-js";
 
 interface EditableH1Options {
     children: string,
@@ -80,6 +82,8 @@ function Edit(): React.JSX.Element {
         throw new Error("Undefined collection id");
     }
 
+    const navigate = useNavigate();
+
     const { data: collection, error: collectionError, isLoading: isCollectionLoading } = useGetCollectionQuery(collectionId);
     const { data: tasks, error: taskError, isLoading: areTasksLoading } = useGetTasksQuery(collectionId);
     const { data: options, error: optionError, isLoading: areOptionsLoading } = useGetCollectionOptionsQuery(collectionId);
@@ -90,6 +94,8 @@ function Edit(): React.JSX.Element {
     const [deleteTask, deleteTaskStatus] = useDeleteTaskMutation();
     const [setOptionFormula, updateOptionStatus] = useSetOptionFormulaMutation();
     const [setOptionIsRight, setOptionIsRightStatus] = useSetOptionIsRightMutation();
+
+    const user = useSelector<StateType, User | null>((state) => state.auth.user);
 
     const checkIcon = useIcon("check.svg");
     const xIcon = useIcon("x.svg");
@@ -119,7 +125,7 @@ function Edit(): React.JSX.Element {
                         <use href={trashIcon}></use></svg>
                 </div>
                 {optionsByTask[task.id]?.map(option =>
-                    <div className="row-container">
+                    <div className="row-container" key={option.id}>
                         <svg viewBox="0 0 24 24" width="48"
                             onClick={() => {
                                 setOptionIsRight({ id: option.id, is_right: !option.is_right });
@@ -132,7 +138,13 @@ function Edit(): React.JSX.Element {
                             {option.formula}</EditableMathJax>
                     </div>)}
             </div>)}
-            <button className="add-task-button" onClick={() => createTask(collectionId)}>+</button>
+            <button className="add-task-button" onClick={() => {
+                if (user) {
+                    createTask({ collection: collectionId, user_id: user.id });
+                } else {
+                    navigate("/login");
+                }
+            }}>+</button>
         </div>
     </div>)
 }

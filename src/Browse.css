@@ -32,7 +32,7 @@
     flex-grow: 1;
     font-family: Inter;
     font-size: 30px;
-    margin: 1px 1px;
+    margin: 1px 5px 1px;
     padding: 10px 0 10px;
     border-width: 1px;
     border-radius: 10px;
@@ -48,7 +48,7 @@
 }
 
 .collection-delete-icon {
-    margin-left: -100px;
+    margin-left: -105px;
 }
 
 .edit-icon {
