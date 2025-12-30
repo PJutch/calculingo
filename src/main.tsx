@@ -31,6 +31,7 @@ ReactDOM.createRoot(root).render(
             <Route path="/browse" element={<Browse />} />
             <Route path="/edit/:collection" element={<Edit />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Login register />} />
           </Routes>
         </MathJaxContext>
       </BrowserRouter>

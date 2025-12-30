@@ -4,25 +4,28 @@ import { Session, User } from "@supabase/supabase-js"
 
 const refetchAuth = createAsyncThunk("auth/refetch", async (_, { rejectWithValue }) => {
     const { data: { session }, error } = await supabase.auth.getSession();
-    if (session === null) return rejectWithValue({ error });
+    if (error) return rejectWithValue({ message: error?.message });
+    if (session === null) return rejectWithValue({message: "Подвердите свой адрес электронной почты"})
     return { session };
 })
 
 export const signIn = createAsyncThunk("auth/sign-in", async ({ email, password }, { rejectWithValue }) => {
     const { data: { session }, error } = await supabase.auth.signInWithPassword({ email, password });
-    if (session === null) return rejectWithValue({ message: error?.message });
+    if (error) return rejectWithValue({ message: error?.message });
+    if (session === null) return rejectWithValue({message: "Подвердите свой адрес электронной почты"})
     return { session };
 })
 
 export const signUp = createAsyncThunk("auth/sign-up", async ({ email, password }, { rejectWithValue }) => {
     const { data: { session }, error } = await supabase.auth.signUp({ email, password });
-    if (session === null) return rejectWithValue({ message: error?.message });
+    if (error) return rejectWithValue({ message: error?.message });
+    if (session === null) return rejectWithValue({message: "Подвердите свой адрес электронной почты"})
     return { session };
 })
 
 export const signOut = createAsyncThunk("auth/sign-out", async (_, { rejectWithValue }) => {
     const { error } = await supabase.auth.signOut();
-    if (error !== null) return rejectWithValue({ message: error?.message });
+    if (error) return rejectWithValue({ message: error?.message });
 })
 
 type AuthState = {
