@@ -1,5 +1,5 @@
-import { createApi } from "@reduxjs/toolkit/query/react"
 import { supabase } from "../../supabase/client"
+import { EndpointBuilder } from "@reduxjs/toolkit/query"
 
 interface Option {
     id: string,
@@ -9,14 +9,8 @@ interface Option {
     user_id: string | null
 }
 
-export const optionsApi = createApi({
-    reducerPath: 'options_api',
-    tagTypes: ["Collection", "Task", "Option"],
-    baseQuery: () => {
-        console.log("Base query called");
-        return { data: null }
-    },
-    endpoints: builder => ({
+export function optionEndpoints(builder: EndpointBuilder<any, "Collection" | "Task" | "Option", "db_api">) {
+    return {
         getOptions: builder.query<Option[], string>({
             queryFn: async (task) => {
                 const { data, error } = await supabase
@@ -85,15 +79,5 @@ export const optionsApi = createApi({
             },
             invalidatesTags: ["Option"]
         })
-    })
-});
-
-export const {
-    useGetOptionsQuery,
-    useGetOptionQuery,
-    useGetCollectionOptionsQuery,
-    useCreateOptionMutation,
-    useDeleteOptionMutation,
-    useSetOptionFormulaMutation,
-    useSetOptionIsRightMutation,
-} = optionsApi;
+    };
+};

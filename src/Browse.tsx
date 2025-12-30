@@ -1,21 +1,21 @@
 import React, { useState } from "react";
 import './Browse.css';
 import { useNavigate } from "react-router-dom";
-import { useCreateCollectionMutation, useDeleteCollectionMutation, useGetCollectionsQuery } from "./redux/collections";
 import useIcon from "./useIcon";
 import { useSelector } from "react-redux";
 import { StateType } from "./redux/store";
 import { User } from "@supabase/supabase-js";
+import db from './redux/db';
 
 function Browse(): React.JSX.Element {
     const navigate = useNavigate();
 
     const [query, setQuery] = useState<string>();
 
-    const { data: collections, error, isLoading } = useGetCollectionsQuery();
+    const { data: collections, error, isLoading } = db.useGetCollectionsQuery();
 
-    const [createCollection, createCollectionStatus] = useCreateCollectionMutation();
-    const [deleteCollection, deleteCollectionStatus] = useDeleteCollectionMutation();
+    const [createCollection, createCollectionStatus] = db.useCreateCollectionMutation();
+    const [deleteCollection, deleteCollectionStatus] = db.useDeleteCollectionMutation();
 
     const user = useSelector<StateType, User | null>((state) => state.auth.user);
 

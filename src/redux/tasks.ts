@@ -1,5 +1,5 @@
-import { createApi } from "@reduxjs/toolkit/query/react"
 import { supabase } from "../../supabase/client"
+import { EndpointBuilder } from "@reduxjs/toolkit/query"
 
 interface Task {
     id: string,
@@ -8,14 +8,8 @@ interface Task {
     user_id: string | null
 }
 
-export const tasksApi = createApi({
-    reducerPath: 'tasks_api',
-    tagTypes: ["Collection", "Task", "Option"],
-    baseQuery: () => {
-        console.log("Base query called");
-        return { data: null }
-    },
-    endpoints: builder => ({
+export function taskEndpoints(builder: EndpointBuilder<any, "Collection" | "Task" | "Option", "db_api">) {
+    return {
         getTasks: builder.query<Task[], string>({
             queryFn: async (collection) => {
                 const { data, error } = await supabase
@@ -33,8 +27,8 @@ export const tasksApi = createApi({
             },
             providesTags: ["Task"]
         }),
-        createTask: builder.mutation<Task, {collection: string, user_id: string}>({
-            queryFn: async ({collection, user_id}) => {
+        createTask: builder.mutation<Task, { collection: string, user_id: string }>({
+            queryFn: async ({ collection, user_id }) => {
                 const { data: taskData, error } = await supabase
                     .from("tasks").insert({ collection, user_id }).select("*").single();
                 if (error) throw error;
@@ -47,7 +41,16 @@ export const tasksApi = createApi({
 
                 return { data: taskData };
             },
-            invalidatesTags: ["Task"]
+            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+                console.log('Mutation started, will invalidate:', ['Task', 'Option']);
+                try {
+                    await queryFulfilled;
+                    console.log('Mutation succeeded, cache should be invalidated');
+                } catch (error) {
+                    console.log('Mutation failed');
+                }
+            },
+            invalidatesTags: ["Task", "Option"]
         }),
         deleteTask: builder.mutation<null, string>({
             queryFn: async (id) => {
@@ -67,13 +70,5 @@ export const tasksApi = createApi({
             },
             invalidatesTags: ["Task"]
         }),
-    })
-});
-
-export const {
-    useGetTaskQuery,
-    useGetTasksQuery,
-    useCreateTaskMutation,
-    useDeleteTaskMutation,
-    useSetTaskFormulaMutation
-} = tasksApi;
+    };
+}

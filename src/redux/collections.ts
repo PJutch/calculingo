@@ -1,5 +1,5 @@
-import { createApi } from "@reduxjs/toolkit/query/react"
 import { supabase } from "../../supabase/client"
+import { EndpointBuilder } from "@reduxjs/toolkit/query";
 
 interface Collection {
     id: string,
@@ -7,14 +7,8 @@ interface Collection {
     user_id: string | null
 }
 
-export const collectionsApi = createApi({
-    reducerPath: 'collections_api',
-    tagTypes: ["Collection", "Task", "Option"],
-    baseQuery: () => {
-        console.log("Base query called");
-        return { data: null }
-    },
-    endpoints: builder => ({
+export function collectionEndpoints(builder: EndpointBuilder<any, "Collection" | "Task" | "Option", "db_api">) {
+    return {
         getCollections: builder.query<Collection[], void>({
             queryFn: async () => {
                 const { data, error } = await supabase
@@ -86,13 +80,5 @@ export const collectionsApi = createApi({
             },
             invalidatesTags: ["Collection"]
         }),
-    })
-});
-
-export const {
-    useGetCollectionsQuery,
-    useGetCollectionQuery,
-    useCreateCollectionMutation,
-    useDeleteCollectionMutation,
-    useSetCollectionNameMutation,
-} = collectionsApi;
+    };
+}

@@ -2,13 +2,11 @@ import { MathJax } from "better-react-mathjax";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import './Edit.css';
-import { useGetCollectionQuery, useSetCollectionNameMutation } from "./redux/collections";
-import { useGetTasksQuery, useCreateTaskMutation, useDeleteTaskMutation, useSetTaskFormulaMutation } from './redux/tasks';
-import { useGetCollectionOptionsQuery, useSetOptionFormulaMutation, useSetOptionIsRightMutation } from './redux/options';
 import useIcon from "./useIcon";
 import { useSelector } from "react-redux";
 import { StateType } from "./redux/store";
 import { User } from "@supabase/supabase-js";
+import db from "./redux/db";
 
 interface EditableH1Options {
     children: string,
@@ -84,16 +82,16 @@ function Edit(): React.JSX.Element {
 
     const navigate = useNavigate();
 
-    const { data: collection, error: collectionError, isLoading: isCollectionLoading } = useGetCollectionQuery(collectionId);
-    const { data: tasks, error: taskError, isLoading: areTasksLoading } = useGetTasksQuery(collectionId);
-    const { data: options, error: optionError, isLoading: areOptionsLoading } = useGetCollectionOptionsQuery(collectionId);
+    const { data: collection, error: collectionError, isLoading: isCollectionLoading } = db.useGetCollectionQuery(collectionId);
+    const { data: tasks, error: taskError, isLoading: areTasksLoading } = db.useGetTasksQuery(collectionId);
+    const { data: options, error: optionError, isLoading: areOptionsLoading } = db.useGetCollectionOptionsQuery(collectionId);
 
-    const [setCollectionName, updateCollectionStatus] = useSetCollectionNameMutation();
-    const [setTaskFormula, updateTaskStatus] = useSetTaskFormulaMutation();
-    const [createTask, createTaskStatus] = useCreateTaskMutation();
-    const [deleteTask, deleteTaskStatus] = useDeleteTaskMutation();
-    const [setOptionFormula, updateOptionStatus] = useSetOptionFormulaMutation();
-    const [setOptionIsRight, setOptionIsRightStatus] = useSetOptionIsRightMutation();
+    const [setCollectionName, updateCollectionStatus] = db.useSetCollectionNameMutation();
+    const [setTaskFormula, updateTaskStatus] = db.useSetTaskFormulaMutation();
+    const [createTask, createTaskStatus] = db.useCreateTaskMutation();
+    const [deleteTask, deleteTaskStatus] = db.useDeleteTaskMutation();
+    const [setOptionFormula, updateOptionStatus] = db.useSetOptionFormulaMutation();
+    const [setOptionIsRight, setOptionIsRightStatus] = db.useSetOptionIsRightMutation();
 
     const user = useSelector<StateType, User | null>((state) => state.auth.user);
 
@@ -140,6 +138,7 @@ function Edit(): React.JSX.Element {
             </div>)}
             <button className="add-task-button" onClick={() => {
                 if (user) {
+                    console.log(user.id);
                     createTask({ collection: collectionId, user_id: user.id });
                 } else {
                     navigate("/login");

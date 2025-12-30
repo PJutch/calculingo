@@ -1,18 +1,14 @@
 import { authSlice, initAuth } from "./auth";
-import { collectionsApi } from "./collections";
-import { optionsApi } from "./options";
-import { tasksApi } from "./tasks";
 import { configureStore } from "@reduxjs/toolkit";
+import db from "./db";
 
 export const store = configureStore({
     reducer: {
-        [collectionsApi.reducerPath]: collectionsApi.reducer,
-        [tasksApi.reducerPath]: tasksApi.reducer,
-        [optionsApi.reducerPath]: optionsApi.reducer,
+        [db.reducerPath]: db.reducer,
         [authSlice.name]: authSlice.reducer,
     },
     middleware: (getMiddleware) =>
-        getMiddleware().concat(collectionsApi.middleware).concat(tasksApi.middleware).concat(optionsApi.middleware)
+        getMiddleware().concat(db.middleware)
 })
 
 export type StateType = ReturnType<typeof store.getState>;
