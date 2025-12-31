@@ -1,16 +1,38 @@
 .header {
     margin: 0;
     text-align: center;
-    font-size: 80px;
     font-family: Inter;
     margin-bottom: 20px;
+}
+
+@media(min-width: 769px) {
+    .header {
+        font-size: 80px;
+    }
+}
+
+@media(max-width: 768px) {
+    .header {
+        font-size: 50px;
+    }
 }
 
 .form {
     display: flex;
     flex-direction: column;
-    width: 50%;
     margin: 0 auto 0;
+}
+
+@media(min-width: 769px) {
+    .form {
+        width: 50%;
+    }
+}
+
+@media(max-width: 768px) {
+    .form {
+        width: 75%;
+    }
 }
 
 .label {
@@ -23,6 +45,7 @@
 .field {
     width: 100%;
     font-size: 20px;
+    box-sizing: border-box;
 }
 
 .error {
@@ -39,7 +62,19 @@
     margin-top: 5px;
 }
 
-.button {
-    margin: 10px 20px 0;
-    font-size: 25px;
+@media (min-width: 769px) {
+    .button {
+        margin: 10px 20px 0;
+        font-size: 25px;
+        font-family: Inter;
+    }
+}
+
+@media (max-width: 768px) {
+    .button {
+        margin-top: 10px;
+        font-family: Inter;
+        font-size: 25px;
+        padding: 0;
+    }
 }

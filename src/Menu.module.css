@@ -73,7 +73,7 @@
     }
 
     .name {
-        font-size: 15px;
+        font-size: 20px;
     }
 
     .menu-wrapper {
@@ -96,6 +96,7 @@
 
     .name {
         font-size: 20px;
+        max-width: 40vw;
     }
 
     .menu-wrapper {

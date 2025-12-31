@@ -17,7 +17,7 @@ function Menu(): React.JSX.Element {
     { id: "tailor", name: "Тейлор", previewLatex: "\\sqrt{2}" },
     { id: "rows", name: "Ряды", previewLatex: "\\sqrt{2}" },
     { id: "multiple_integrals", name: "Кратные интегралы", previewLatex: "\\iint\\limits_D dx\\,dy" },
-    { id: "diff", name: "Дифференцирование", previewLatex: "\\frac{d}{dx}x^2" },
+    { id: "diff", name: "Производные", previewLatex: "\\frac{d}{dx}x^2" },
     { id: "complex", name: "Комплексные числа", previewLatex: "e^{i\\pi}" },
   ];
 

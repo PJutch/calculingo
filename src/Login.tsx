@@ -24,9 +24,9 @@ export default function Login({ register }: { register?: boolean }): React.JSX.E
                 }
 
                 if (window.history.length > 2) {
-                    navigate(-1, {replace: true});
+                    navigate(-1, { replace: true });
                 } else {
-                    navigate("/", {replace: true});
+                    navigate("/", { replace: true });
                 }
             } catch (error: any) {
                 setError(error.message);
@@ -40,7 +40,7 @@ export default function Login({ register }: { register?: boolean }): React.JSX.E
                 Пароль<br />
                 <input type="password" className={styles.field} onChange={(e) => setPassword(e.target.value)} />
             </label>
-            { error ? <p className={styles.error}>{error}</p> : "" }
+            {error ? <p className={styles.error}>{error}</p> : ""}
             {
                 !register ?
                     <Link to="/register" className={styles.link} replace>Зарегистрироваться</Link> :

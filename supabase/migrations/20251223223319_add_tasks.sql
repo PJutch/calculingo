@@ -5,7 +5,7 @@ INSERT INTO collections VALUES
     ('tailor', 'Тейлор'),
     ('rows', 'Ряды'),
     ('multiple_integrals', 'Кратные интегралы'),
-    ('diff', 'Дифференцирование'),
+    ('diff', 'Производные'),
     ('complex', 'Комплексные числа');
 
 -- ИНТЕГРАЛЫ
