@@ -1,8 +1,22 @@
 import { Preview } from "@storybook/react-vite";
-import { vi } from 'vitest'
+import { initialize, mswLoader } from "msw-storybook-addon";
+import { supabaseHandlers } from "../src/stories/supabaseMocks";
+
+initialize({
+  onUnhandledRequest: 'warn',
+  serviceWorker: {
+    url: './mockServiceWorker.js',
+  },
+});
 
 const preview: Preview = {
   parameters: {
+    msw: {
+      handlers: supabaseHandlers,
+    },
+
+    layout: 'fullscreen',
+
     controls: {
       matchers: {
         color: /(background|color)$/i,
@@ -17,6 +31,7 @@ const preview: Preview = {
       test: "todo"
     }
   },
+  loaders: [mswLoader],
 };
 
 export default preview;

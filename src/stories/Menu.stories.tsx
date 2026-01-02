@@ -7,7 +7,7 @@ export default {
     component: Menu,
     decorators: [
         (Story: React.FC) => (
-            <div style={{ width: "50%", height: "100%" }}>
+            <div style={{ width: "50%", height: "100vh" }}>
                 <MemoryRouter>
                     <MathJaxContext>
                         <Story />
