@@ -19,14 +19,12 @@ test.describe('Screenshot tests', () => {
   });
 
   test('Browse test', async ({ page }) => {
-    // requires storybook started to work
     await page.goto('http://localhost:6006/iframe.html?id=pages-browse--default');
     await page.waitForTimeout(1000); // wait for storybook to load
     await expect(page).toHaveScreenshot('browse.png');
   });
 
   test('Edit test', async ({ page }) => {
-    // requires storybook started to work
     await page.goto('http://localhost:6006/iframe.html?id=pages-edit--default');
     await page.waitForTimeout(1000); // wait for storybook to load
     await waitForMathJax(page);
@@ -34,7 +32,6 @@ test.describe('Screenshot tests', () => {
   });
 
   test('Task test', async ({ page }) => {
-    // requires storybook started to work
     await page.goto('http://localhost:6006/iframe.html?id=pages-task--default');
     await page.waitForTimeout(1000); // wait for storybook to load
     await waitForMathJax(page);
@@ -42,9 +39,14 @@ test.describe('Screenshot tests', () => {
   });
 
   test('Login test', async ({ page }) => {
-    // requires storybook started to work
     await page.goto('http://localhost:6006/iframe.html?id=pages-login--default');
     await page.waitForTimeout(1000); // wait for storybook to load
     await expect(page).toHaveScreenshot('login.png');
+  });
+
+  test('Loading test', async ({ page }) => {
+    await page.goto('http://localhost:6006/iframe.html?id=pages-loading--default');
+    await page.waitForTimeout(1000); // wait for storybook to load
+    await expect(page).toHaveScreenshot('loading.png');
   });
 });

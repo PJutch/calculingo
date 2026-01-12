@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, Link, useLocation } from "react-router-dom";
 import './Task.css';
 import db from './redux/db';
+import Loading from "./Loading";
 
 function Task(): React.JSX.Element {
     const [selected, setSelected] = useState<string | null>(null);
@@ -18,7 +19,7 @@ function Task(): React.JSX.Element {
     const { data: task, error: taskError, isLoading: isTaskLoading } = db.useGetTaskQuery(taskId);
     const { data: options, error: optionError, isLoading: areOptionsLoading } = db.useGetOptionsQuery(taskId);
 
-    if (isTaskLoading || areOptionsLoading) return (<p>Loading...</p>);
+    if (isTaskLoading || areOptionsLoading) return (<Loading></Loading>);
 
     if (task === undefined) throw taskError || new Error("failed to load tasks, reason unknown");
     if (options === undefined) throw optionError || new Error("failed to load options, reason unknown");
@@ -64,7 +65,7 @@ export function RandomTaskRedirect() {
         throw new Error("undefined collection id");
     }
 
-    const {data: tasks, error, isLoading} = db.useGetTasksQuery(collection);
+    const { data: tasks, error, isLoading } = db.useGetTasksQuery(collection);
 
     useEffect(() => {
         if (isLoading) return;

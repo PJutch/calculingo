@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { StateType } from "./redux/store";
 import { User } from "@supabase/supabase-js";
 import db from './redux/db';
+import Loading from "./Loading";
 
 function Browse(): React.JSX.Element {
     const navigate = useNavigate();
@@ -22,7 +23,7 @@ function Browse(): React.JSX.Element {
     const trashIcon = useIcon('trash.svg');
     const editIcon = useIcon('edit.svg');
 
-    if (isLoading) return (<p>Loading...</p>);
+    if (isLoading) return (<Loading></Loading>);
     if (collections === undefined) throw error || new Error("failed to load collections, reason unknown");
 
     return (<div className="browse-container">

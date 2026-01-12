@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { StateType } from "./redux/store";
 import { User } from "@supabase/supabase-js";
 import db from "./redux/db";
+import Loading from './Loading';
 
 interface EditableH1Options {
     children: string,
@@ -100,7 +101,7 @@ function Edit(): React.JSX.Element {
     const trashIcon = useIcon("trash.svg");
 
     if (isCollectionLoading || areTasksLoading || areOptionsLoading) {
-        return (<p>Loading...</p>)
+        return (<Loading></Loading>);
     }
 
     if (collection === undefined) throw collectionError || new Error("Fetching collection failed, reason unknown");
