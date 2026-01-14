@@ -26,6 +26,8 @@ function Browse(): React.JSX.Element {
     if (isLoading) return (<Loading></Loading>);
     if (collections === undefined) throw error || new Error("failed to load collections, reason unknown");
 
+    const hasHover = window.matchMedia('(hover: hover)').matches;
+
     return (<div className="browse-container">
         <input placeholder="Введите запрос..." className="search-bar" onChange={e => setQuery(e.target.value)} />
         <div className="collections">
@@ -35,8 +37,11 @@ function Browse(): React.JSX.Element {
                         <button className="collection" onClick={() => navigate(`/solve/${collection.id}`)}>
                             {collection.name}</button>
                         {
-                            !user || user.id == collection.user_id ?
-                                <><svg viewBox="0 0 24 24" width="48" className="collection-delete-icon"
+                            hasHover && !user || user && user.id == collection.user_id ?
+                                <><svg viewBox="0 0 24 24" width="48"
+                                    className={hasHover
+                                        ? "collection-delete-icon hidden-icon"
+                                        : "collection-delete-icon"}
                                     onClick={() => {
                                         if (user) {
                                             deleteCollection(collection.id)
@@ -45,8 +50,12 @@ function Browse(): React.JSX.Element {
                                         }
                                     }}>
                                     <use href={trashIcon}></use></svg>
-                                    <svg viewBox="0 0 24 24" width="48" className="edit-icon"
-                                        onClick={() => navigate(user ? `/edit/${collection.id}` : "/login")}>
+                                    <svg viewBox="0 0 24 24" width="48"
+                                        className={hasHover
+                                            ? "collection-edit-icon hidden-icon"
+                                            : "collection-edit-icon"}
+                                        onClick={() => navigate(
+                                            user ? `/edit/${collection.id}` : "/login")}>
                                         <use href={editIcon}></use></svg></>
                                 : ""
                         }
@@ -58,7 +67,7 @@ function Browse(): React.JSX.Element {
             } else {
                 navigate("/login");
             }
-        }}>+</button>
+        }}>{hasHover ? "+" : "Войти"}</button>
     </div>);
 }
 

@@ -1,25 +1,14 @@
-@media (min-width: 769px) {
-    html,
-    body {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-        background-color: lightgrey;
-    }
-
-    .main {
-        width: 50%;
-        height: 100%;
-        margin: 0 auto 0;
-        background-color: white;
-    }
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background-color: lightgrey;
 }
 
-@media (max-width: 768px) {
-    html, body, main {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        height: 100%;
-    }
+.main {
+    width: min(max(50%, 700px), 100%);
+    height: 100%;
+    margin: 0 auto 0;
+    background-color: white;
 }

@@ -55,17 +55,11 @@
     margin-right: 10px;
 }
 
-@media (min-width: 769px) {
-    .collection-delete-icon, .edit-icon {
-        opacity: 0;
-        transition: opacity 0.2s ease;
-    }
+.hidden-icon {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
 
-    .collection-container:hover .edit-icon {
-        opacity: 1;
-    }
-
-    .collection-container:hover .collection-delete-icon {
-        opacity: 1;
-    }
+.collection-container:hover .hidden-icon {
+    opacity: 1;
 }
