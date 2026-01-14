@@ -61,7 +61,8 @@ function Task(): React.JSX.Element {
                 </button>
             })}
             <div className="solution-overlay" hidden={!showSolution}>
-                <MathJax className="solution">{solution ?? "Loading..."}</MathJax>
+                {solution !== null ?
+                <MathJax className="solution">{solution}</MathJax> : <Loading/>}
             </div>
         </div>
         <div className="next-wrapper">
