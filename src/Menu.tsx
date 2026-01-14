@@ -28,7 +28,8 @@ function Menu(): React.JSX.Element {
       <h1 className={styles.title}>Calculingo</h1>
       <div className={styles.buttons}>
         {premade_collections.map((collection) =>
-          <button className={styles.button} onClick={() => navigate(`/solve/${collection.id}`)}>
+          <button className={styles.button} key={collection.id}
+            onClick={() => navigate(`/solve/${collection.id}`)}>
             <p className={styles.preview}>
               <MathJax>\({collection.previewLatex}\)</MathJax>
             </p>

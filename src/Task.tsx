@@ -56,13 +56,14 @@ function Task(): React.JSX.Element {
                     style = "option";
                 }
 
-                return <button className={style} onClick={() => setSelected(option.id)}>
+                return <button className={style} key={option.id}
+                    onClick={() => setSelected(option.id)}>
                     <MathJax>\(\displaystyle {option.formula}\)</MathJax>
                 </button>
             })}
             <div className="solution-overlay" hidden={!showSolution}>
                 {solution !== null ?
-                <MathJax className="solution">{solution}</MathJax> : <Loading/>}
+                    <MathJax className="solution">{solution}</MathJax> : <Loading />}
             </div>
         </div>
         <div className="next-wrapper">

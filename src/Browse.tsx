@@ -33,7 +33,7 @@ function Browse(): React.JSX.Element {
         <div className="collections">
             {collections.filter(collection => query == undefined || query === "" || collection.name.includes(query))
                 .map(collection =>
-                    <div className="collection-container">
+                    <div className="collection-container" key={collection.id}>
                         <button className="collection" onClick={() => navigate(`/solve/${collection.id}`)}>
                             {collection.name}</button>
                         {
